@@ -1,0 +1,15 @@
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\bin\Debug\net8.0-windows\IPScanner.exe
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\bin\Debug\net8.0-windows\IPScanner.deps.json
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\bin\Debug\net8.0-windows\IPScanner.runtimeconfig.json
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\bin\Debug\net8.0-windows\IPScanner.dll
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\bin\Debug\net8.0-windows\IPScanner.pdb
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\obj\Debug\net8.0-windows\IPScanner.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\obj\Debug\net8.0-windows\IPScanner.AssemblyInfoInputs.cache
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\obj\Debug\net8.0-windows\IPScanner.AssemblyInfo.cs
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\obj\Debug\net8.0-windows\IPScanner.csproj.CoreCompileInputs.cache
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\obj\Debug\net8.0-windows\IPScanner.sourcelink.json
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\obj\Debug\net8.0-windows\IPScanner.dll
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\obj\Debug\net8.0-windows\refint\IPScanner.dll
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\obj\Debug\net8.0-windows\IPScanner.pdb
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\obj\Debug\net8.0-windows\IPScanner.genruntimeconfig.cache
+C:\Users\Alumno_invitado\Documents\GitHub\SantinoMartinez\tpRedes\Actividad14_Escaner-de-Red\IPScanner\obj\Debug\net8.0-windows\ref\IPScanner.dll
