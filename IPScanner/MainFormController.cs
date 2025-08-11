@@ -3,41 +3,126 @@ using IPScanner.Model;
 
 namespace IPScanner.Controller
 {
-    // Clase que conecta la Vista (MainForm) con la lógica (validaciones)
+    // Clase que conecta la Vista (MainForm) con la lógica
     public class MainFormController
     {
-        private TextBox campo1;
-        private TextBox campo2;
-        private NumericUpDown campo3;
-        private Button botonHola;
+        private TextBox txtIPInicio;
+        private TextBox txtIPFin;
+        private NumericUpDown numTiempoEspera;
+        private Button btnEscanear;
 
-        public MainFormController(TextBox c1, TextBox c2, NumericUpDown c3, Button bHola)
+        public MainFormController(TextBox txtIPInicio, TextBox txtIPFin, NumericUpDown numTiempoEspera, Button btnEscanear)
         {
-            campo1 = c1;
-            campo2 = c2;
-            campo3 = c3;
-            botonHola = bHola;
+            this.txtIPInicio = txtIPInicio;
+            this.txtIPFin = txtIPFin;
+            this.numTiempoEspera = numTiempoEspera;
+            this.btnEscanear = btnEscanear;
 
-            campo1.TextChanged += ValidarCampos;
-            campo2.TextChanged += ValidarCampos;
-            campo3.ValueChanged += ValidarCampos;
+            txtIPInicio.TextChanged += ValidarCampos; // TextChanged es un evento, y le estamos pasando ValidarCampos para un posterior uso de este
+            txtIPFin.TextChanged += ValidarCampos;
+            numTiempoEspera.ValueChanged += ValidarCampos;
 
-            campo2.Enabled = false;
-            campo3.Enabled = false;
-            botonHola.Enabled = false;
+            txtIPFin.Enabled = false; // Los deshabilito, por ahora
+            numTiempoEspera.Enabled = false;
+            btnEscanear.Enabled = false;
         }
 
         private void ValidarCampos(object sender, System.EventArgs e)
         {
-            bool campo1Valido = IPv4Validator.EsDireccionValida(campo1.Text);
-            campo2.Enabled = campo1Valido;
+            bool txtIPInicioValido = IPv4Validator.EsDireccionValida(txtIPInicio.Text);
+            txtIPFin.Enabled = txtIPInicioValido;
 
-            bool campo2Valido = IPv4Validator.EsDireccionValida(campo2.Text);
-            campo3.Enabled = campo2Valido;
+            bool txtIPFinValido = IPv4Validator.EsDireccionValida(txtIPFin.Text);
+            numTiempoEspera.Enabled = txtIPFinValido;
 
-            bool campo3Valido = campo3.Value > 0;
+            bool numTiempoEsperaValido = numTiempoEspera.Value > 9 && numTiempoEspera.Value < 301;
 
-            botonHola.Enabled = campo1Valido && campo2Valido && campo3Valido;
+            btnEscanear.Enabled = txtIPInicioValido && txtIPFinValido && numTiempoEsperaValido;
         }
+
+        private async Task<string> RunCommandAsync(string command, string args)
+        {
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = command,
+                    Arguments = args,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                },
+                EnableRaisingEvents = true
+            };
+
+            var output = new StringBuilder();
+
+            process.OutputDataReceived += (s, e) =>
+            {
+                if (e.Data != null)
+                {
+                    output.AppendLine(e.Data);
+                    AppendToConsole(e.Data); // Método que actualiza el TextBox/RichTextBox
+                }
+            };
+            process.ErrorDataReceived += (s, e) =>
+            {
+                if (e.Data != null)
+                {
+                    output.AppendLine(e.Data);
+                    AppendToConsole(e.Data);
+                }
+            };
+
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+
+            await Task.Run(() => process.WaitForExit());
+            return output.ToString();
+        }
+
+        private async Task ScanRangeAsync(List<string> ips, int timeLimitSeconds)
+        {
+            var sw = Stopwatch.StartNew();
+            var results = new List<ScanResult>();
+
+            foreach (var ip in ips)
+            {
+                if (sw.Elapsed.TotalSeconds > timeLimitSeconds)
+                {
+                    AppendToConsole("Tiempo límite excedido. Cancelando...");
+                    break;
+                }
+
+                AppendToConsole($"Escaneando {ip}...");
+
+                // Ping
+                string pingOutput = await RunCommandAsync("ping", $"-n 1 {ip}");
+                bool pingOk = pingOutput.Contains("tiempo=") || pingOutput.Contains("time=");
+
+                // nslookup
+                string nsOutput = await RunCommandAsync("nslookup", ip);
+                string hostName = ExtractHostName(nsOutput);
+
+                // Tiempo de respuesta
+                double? pingTime = ExtractPingTime(pingOutput);
+
+                results.Add(new ScanResult
+                {
+                    IP = ip,
+                    HostName = hostName,
+                    PingOk = pingOk,
+                    PingTime = pingTime
+                });
+
+                UpdateProgress(results.Count, ips.Count);
+            }
+
+            sw.Stop();
+            ShowResults(results);
+        }
+
     }
 }
