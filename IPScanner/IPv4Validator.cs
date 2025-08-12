@@ -32,17 +32,43 @@ namespace IPScanner.Model
 
         private List<string> GetIPRange(string startIP, string endIP)
         {
-            var startIPsplit = new List<int>();
-            var endIPsplit = new List<int>();
-
-            foreach (string startIP.Split('.') in partes) { startIPsplit.Add(numero); }
-            foreach (string endIP.Split('.') in partes) { endIPsplit.Add(numero); }
+            // Convertir las IPs a listas de enteros, separados por "."
+            var start = startIP.Split('.').Select(int.Parse).ToList();
+            var end = endIP.Split('.').Select(int.Parse).ToList();
 
             var ips = new List<string>();
 
-            //falta la lógica de hacer el rango de IPs
+            // IP actual como copia de la inicial
+            var current = new List<int>(start);
+
+            // Repetir hasta que la IP actual sea igual a la final
+            do
+            {
+                ips.Add(string.Join(".", current));
+
+                // Incrementar el último octeto
+                current[3]++;
+
+                // Si el último número es mayor a 255, se pone en 0, y al siguiente número se le suma 1, y se comprueba lo mismo hasta el número final
+                if (current[3] > 255)
+                {
+                    current[3] = 0;
+                    current[2]++;
+                    if (current[2] > 255)
+                    {
+                        current[2] = 0;
+                        current[1]++;
+                        if (current[1] > 255)
+                        {
+                            current[1] = 0;
+                            current[0]++;
+                        }
+                    }
+                }
+            } while (!current.SequenceEqual(end));
 
             return ips;
         }
+
     }
 }

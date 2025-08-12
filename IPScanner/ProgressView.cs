@@ -11,7 +11,6 @@ namespace IPScanner.View
 
         public ProgressView()
         {
-            InitializeComponent();
             SetupControls();
         }
 
