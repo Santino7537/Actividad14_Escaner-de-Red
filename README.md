@@ -6,3 +6,6 @@ Se hicieron 4 archivos utilizando el modelo vista controlador, en el cual MainFo
 ## Lunes 11/08
 Se investigó mucho el como utilizar una librería "System.Diagnostics.Process", que la utilizaré cuando la comprenda del todo y pueda hacer el código por completo.
 Además, se intento implementar algunos métodos y una clase para poder llevar a cabo al parte lógica del programa, pero todavia no funciona bien.
+## Martes 12/08
+Se investigó más a fondo sobre como ejecutar los comandos de cmd sobre C# con librerias (System.Diagnostics.Process es una de ellas).
+Además, se trabajó sobre los métodos comentados del Lunes 11/08, y se agregó una nueva vlase que sirve para guardar los resultados de un escaneo de IP.
