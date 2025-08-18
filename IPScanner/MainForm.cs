@@ -1,55 +1,91 @@
-using System.Windows.Forms;
 using IPScanner.Controller;
 
-namespace IPScanner.View
+namespace IPScanner.MnView
 {
-    // La vista principal, hereda de Form
+    // La vista principal.
     public class MainForm : Form
     {
-        private TextBox txtIPInicio;
-        private TextBox txtIPFin;
-        private NumericUpDown numTiempoEspera;
-        private Button btnEscanear;
-        private Button btnLimpiar;
+        private readonly TextBox startIPField, endIPField;
+        private readonly NumericUpDown timeOutField;
+        private readonly Button scanBtn, cleanBtn;
 
         public MainForm()
         {
-            this.Text = "Escaneo de Red"; //Título de ventana
-            this.Width = 400;
-            this.Height = 250;
+            Text = "Escaneo de Red"; // Título de la vista.
+            FormBorderStyle = FormBorderStyle.FixedSingle; // Impide redimensionar la ventana.
+            MaximizeBox = false; // Deshabilita el botón de maximizar.
+            Width = 400; Height = 250; // Dimensiones de la ventana.
 
-            var layout = new FlowLayoutPanel(); //Diseño con FlowLayoutPanel (una columna)
-            layout.Dock = DockStyle.Fill;
-            layout.FlowDirection = FlowDirection.TopDown;
-            layout.AutoScroll = true;
+            var layout = new FlowLayoutPanel // Diseño con "FlowLayoutPanel" (una columna).
+            {
+                Dock = DockStyle.Fill, // El panel ocupa todo el espacio posible.
+                FlowDirection = FlowDirection.TopDown, // Los componentes se apilan de arriba hacia abajo.
+                AutoScroll = true // Agrega scroll automático si los controles no caben en la ventana.
+            };
 
-            layout.Controls.Add(new Label { Text = "Bienvenido, ingrese el rango de IPs que desee escanear", AutoSize = true });
+            layout.Controls.Add(new Label // Agrega un "Label" al "FlowLayoutPanel".
+            {
+                Text = "Bienvenido, ingrese el rango de IPs que desee escanear",
+                AutoSize = true // El tamaño del "Label" se ajusta automáticamente al texto.
+            });
 
-            // Campo 1
-            layout.Controls.Add(new Label { Text = "IP Inicio:", AutoSize = true });
-            txtIPInicio = new TextBox { Width = 100 };
-            layout.Controls.Add(txtIPInicio);
+            layout.Controls.Add(new Label
+            {
+                Text = "IP Inicio:",
+                AutoSize = true
+            });
 
-            // Campo 2
-            layout.Controls.Add(new Label { Text = "IP Fin:", AutoSize = true });
-            txtIPFin = new TextBox { Width = 100 };
-            layout.Controls.Add(txtIPFin);
+            startIPField = new TextBox { Width = 100 }; // Crea un "TextBox", que permite al usuario ingresar la IP inicial.
+            layout.Controls.Add(startIPField);
 
-            // Campo 3 (número)
-            layout.Controls.Add(new Label { Text = "Tiempo límite (segundos):", AutoSize = true });
-            numTiempoEspera = new NumericUpDown { Width = 100, Minimum = 10, Maximum = 300 };
-            layout.Controls.Add(numTiempoEspera);
+            layout.Controls.Add(new Label
+            {
+                Text = "IP Fin:",
+                AutoSize = true
+            });
 
-            // Botones
-            btnEscanear = new Button { Text = "Escanear", Enabled = false };
-            btnLimpiar = new Button { Text = "Limpiar" };
-            layout.Controls.Add(btnEscanear);
-            layout.Controls.Add(btnLimpiar);
+            endIPField = new TextBox { Width = 100 }; // Crea un "TextBox", que permite al usuario ingresar la IP final.
+            layout.Controls.Add(endIPField);
 
-            this.Controls.Add(layout);
+            layout.Controls.Add(new Label
+            {
+                Text = "Tiempo límite (segundos):",
+                AutoSize = true
+            });
 
-            // Controlador que se encarga de las validaciones
-            var controller = new MainFormController(txtIPInicio, txtIPFin, numTiempoEspera, btnEscanear);
+            timeOutField = new NumericUpDown // Crea un "NumericUpDown", que permite seleccionar un número dentro de un rango.
+            {
+                Width = 100,
+                Minimum = 10, // Restringe los valores menores a 10.
+                Maximum = 1800 // Restringe los valores mayores a 1800.
+            };
+            layout.Controls.Add(timeOutField);
+
+            scanBtn = new Button // Crea un "Button", que permite al usuario precionarlo.
+            {
+                Text = "Escanear",
+                Enabled = false // Por ahora el botón esta deshabilitado.
+            };
+            layout.Controls.Add(scanBtn);
+
+            cleanBtn = new Button { Text = "Limpiar" };
+            layout.Controls.Add(cleanBtn);
+
+            Controls.Add(layout); // Agrega el "FlowLayoutPanel" a la ventana.
+
+            new MainController(this); // Crea el controlador de las vistas.
         }
+
+        public TextBox GetStartIPField() { return startIPField; }
+        public TextBox GetEndIPField() { return endIPField; }
+        public NumericUpDown GetTimeOutField() { return timeOutField; }
+        public Button GetScanBtn() { return scanBtn; }
+        public Button GetCleanBtn() { return cleanBtn; }
+
+        public void SetStartIPFieldEnabled(bool enabled) { startIPField.Enabled = enabled; }
+        public void SetEndIPFieldEnabled(bool enabled) { endIPField.Enabled = enabled; }
+        public void SetTimeOutFieldEnabled(bool enabled) { timeOutField.Enabled = enabled; }
+        public void SetScanBtnEnabled(bool enabled) { scanBtn.Enabled = enabled; }
+        public void SetCleanbtnEnabled(bool enabled) { cleanBtn.Enabled = enabled; }
     }
 }

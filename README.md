@@ -9,3 +9,11 @@ Además, se intento implementar algunos métodos y una clase para poder llevar a
 ## Martes 12/08
 Se investigó más a fondo sobre como ejecutar los comandos de cmd sobre C# con librerias (System.Diagnostics.Process es una de ellas).
 Además, se trabajó sobre los métodos comentados del Lunes 11/08, y se agregó una nueva vlase que sirve para guardar los resultados de un escaneo de IP.
+## Lunes 18/08
+Se terminó la aplicación, cumpliendo todos los requisitos del trabajo práctico en cuanto a la parte del programa, solucionando varios errores, añadiendo y eliminando clases, agregando nuevos métodos, y optimizando partes del código en el proceso.
+Para poder abrir el programa se debe:
+    - Descargar la carpeta "IPScanner".
+    - Ir a "IPScanner/bin/Debug/net8.0-windows".
+    - Crear un acceso directo de "IPScanner.exe".
+    - Mover el acceso directo al Escritorio preferentemente.
+    - Ejecutar el acceso directo.
