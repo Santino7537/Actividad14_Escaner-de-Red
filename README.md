@@ -12,8 +12,11 @@ Además, se trabajó sobre los métodos comentados del Lunes 11/08, y se agregó
 ## Lunes 18/08
 Se terminó la aplicación, cumpliendo todos los requisitos del trabajo práctico en cuanto a la parte del programa, solucionando varios errores, añadiendo y eliminando clases, agregando nuevos métodos, y optimizando partes del código en el proceso.
 Para poder abrir el programa se debe:
-    - Descargar la carpeta "IPScanner".
-    - Ir a "IPScanner/bin/Debug/net8.0-windows".
+    - Descargar el archivo comprimido "IPScanner".
+    - Extraiga el contenido en una carpeta de su preferencia.
+    - Entre a la carpeta "IPScanner", y seguir la ruta "bin/Debug/net8.0-windows".
+    - Ejecutar el archivo "IPScanner.exe".
+    Opcional:
     - Crear un acceso directo de "IPScanner.exe".
     - Mover el acceso directo al Escritorio preferentemente.
     - Ejecutar el acceso directo.
