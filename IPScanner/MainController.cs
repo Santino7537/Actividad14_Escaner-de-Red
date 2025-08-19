@@ -35,7 +35,7 @@ namespace IPScanner.Controller
             mainForm.SetEndIPFieldEnabled(false); // Los deshabilito, por ahora.
             mainForm.SetTimeOutFieldEnabled(false);
             mainForm.SetScanBtnEnabled(false);
-            mainForm.SetCleanbtnEnabled(false);
+            mainForm.SetCleanBtnEnabled(false);
         }
 
         private void ValidateIPs(object? sender, System.EventArgs e)
@@ -52,7 +52,7 @@ namespace IPScanner.Controller
         private void CleanProgressView(object? sender, System.EventArgs e)
         {
             progressView.CleanAll();
-            mainForm.SetCleanbtnEnabled(false);
+            mainForm.SetCleanBtnEnabled(false);
         }
 
         private async void ScanIPs(object? sender, System.EventArgs e)
@@ -83,7 +83,7 @@ namespace IPScanner.Controller
 
             mainForm.Enabled = true;
             mainForm.SetScanBtnEnabled(true);
-            mainForm.SetCleanbtnEnabled(true);
+            mainForm.SetCleanBtnEnabled(true);
 
             progressView.SetOrderBoxEnabled(true);
             progressView.SetSaveBtnEnabled(true);

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\Escuela\\5°¿\\Computación\\Tarea-Trabajo_en_clase-Proyectos\\Tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj": {}
+    "D:\\Escuela\\5°¿\\Computación\\Tarea-Trabajo_en_clase-Proyectos\\Tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj": {}
   },
   "projects": {
-    "d:\\Escuela\\5°¿\\Computación\\Tarea-Trabajo_en_clase-Proyectos\\Tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj": {
+    "D:\\Escuela\\5°¿\\Computación\\Tarea-Trabajo_en_clase-Proyectos\\Tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\Escuela\\5°¿\\Computación\\Tarea-Trabajo_en_clase-Proyectos\\Tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj",
+        "projectUniqueName": "D:\\Escuela\\5°¿\\Computación\\Tarea-Trabajo_en_clase-Proyectos\\Tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj",
         "projectName": "IPScanner",
-        "projectPath": "d:\\Escuela\\5°¿\\Computación\\Tarea-Trabajo_en_clase-Proyectos\\Tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj",
+        "projectPath": "D:\\Escuela\\5°¿\\Computación\\Tarea-Trabajo_en_clase-Proyectos\\Tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj",
         "packagesPath": "C:\\Users\\Diego\\.nuget\\packages\\",
-        "outputPath": "d:\\Escuela\\5°¿\\Computación\\Tarea-Trabajo_en_clase-Proyectos\\Tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\obj\\",
+        "outputPath": "D:\\Escuela\\5°¿\\Computación\\Tarea-Trabajo_en_clase-Proyectos\\Tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Diego\\AppData\\Roaming\\NuGet\\NuGet.Config"

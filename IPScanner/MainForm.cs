@@ -86,6 +86,6 @@ namespace IPScanner.MnView
         public void SetEndIPFieldEnabled(bool enabled) { endIPField.Enabled = enabled; }
         public void SetTimeOutFieldEnabled(bool enabled) { timeOutField.Enabled = enabled; }
         public void SetScanBtnEnabled(bool enabled) { scanBtn.Enabled = enabled; }
-        public void SetCleanbtnEnabled(bool enabled) { cleanBtn.Enabled = enabled; }
+        public void SetCleanBtnEnabled(bool enabled) { cleanBtn.Enabled = enabled; }
     }
 }
