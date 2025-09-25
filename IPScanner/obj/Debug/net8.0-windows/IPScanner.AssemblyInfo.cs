@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IPScanner")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c9043babbe35cb2a113da1f9cf5908355e63dfaa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+18a12cc271429ed7ae98bdf023da30b740b8edf2")]
 [assembly: System.Reflection.AssemblyProductAttribute("IPScanner")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IPScanner")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

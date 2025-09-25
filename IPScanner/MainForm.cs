@@ -7,7 +7,7 @@ namespace IPScanner.MnView
     {
         private readonly TextBox startIPField, endIPField;
         private readonly NumericUpDown timeOutField;
-        private readonly Button scanBtn, cleanBtn;
+        private readonly Button scanBtn, cleanBtn, netScanBtn;
 
         public MainForm()
         {
@@ -71,6 +71,9 @@ namespace IPScanner.MnView
             cleanBtn = new Button { Text = "Limpiar" };
             layout.Controls.Add(cleanBtn);
 
+            netScanBtn = new Button { Text = "Ejecutar netScan" };
+            layout.Controls.Add(netScanBtn);
+
             Controls.Add(layout); // Agrega el "FlowLayoutPanel" a la ventana.
 
             new MainController(this); // Crea el controlador de las vistas.
@@ -81,11 +84,13 @@ namespace IPScanner.MnView
         public NumericUpDown GetTimeOutField() { return timeOutField; }
         public Button GetScanBtn() { return scanBtn; }
         public Button GetCleanBtn() { return cleanBtn; }
+        public Button GetNetScanBtn() { return netScanBtn; }
 
         public void SetStartIPFieldEnabled(bool enabled) { startIPField.Enabled = enabled; }
         public void SetEndIPFieldEnabled(bool enabled) { endIPField.Enabled = enabled; }
         public void SetTimeOutFieldEnabled(bool enabled) { timeOutField.Enabled = enabled; }
         public void SetScanBtnEnabled(bool enabled) { scanBtn.Enabled = enabled; }
         public void SetCleanBtnEnabled(bool enabled) { cleanBtn.Enabled = enabled; }
+        public void SetNetScanBtnEnabled(bool enabled) { netScanBtn.Enabled = enabled; }
     }
 }
