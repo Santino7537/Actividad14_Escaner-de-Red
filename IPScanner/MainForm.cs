@@ -14,7 +14,7 @@ namespace IPScanner.MnView
             Text = "Escaneo de Red"; // Título de la vista.
             FormBorderStyle = FormBorderStyle.FixedSingle; // Impide redimensionar la ventana.
             MaximizeBox = false; // Deshabilita el botón de maximizar.
-            Width = 400; Height = 250; // Dimensiones de la ventana.
+            Width = 400; Height = 350; // Dimensiones de la ventana.
 
             var layout = new FlowLayoutPanel // Diseño con "FlowLayoutPanel" (una columna).
             {
@@ -71,7 +71,13 @@ namespace IPScanner.MnView
             cleanBtn = new Button { Text = "Limpiar" };
             layout.Controls.Add(cleanBtn);
 
-            netScanBtn = new Button { Text = "Ejecutar netScan" };
+            layout.Controls.Add(new Label
+            {
+                Text = "Abrir ventana de netscan",
+                AutoSize = true
+            });
+
+            netScanBtn = new Button { Text = "NetScan" };
             layout.Controls.Add(netScanBtn);
 
             Controls.Add(layout); // Agrega el "FlowLayoutPanel" a la ventana.

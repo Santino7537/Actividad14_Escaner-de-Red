@@ -8,19 +8,19 @@
     "net8.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Alumno_invitado\\.nuget\\packages\\": {}
+    "C:\\Users\\Diego\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\git\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj",
+      "projectUniqueName": "D:\\escuela\\quinto_primera\\computacion\\tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj",
       "projectName": "IPScanner",
-      "projectPath": "C:\\git\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj",
-      "packagesPath": "C:\\Users\\Alumno_invitado\\.nuget\\packages\\",
-      "outputPath": "C:\\git\\Actividad14_Escaner-de-Red\\IPScanner\\obj\\",
+      "projectPath": "D:\\escuela\\quinto_primera\\computacion\\tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\IPScanner.csproj",
+      "packagesPath": "C:\\Users\\Diego\\.nuget\\packages\\",
+      "outputPath": "D:\\escuela\\quinto_primera\\computacion\\tarea\\Redes\\Actividad14_Escaner-de-Red\\IPScanner\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Alumno_invitado\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Diego\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0-windows"
@@ -67,7 +67,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.412/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

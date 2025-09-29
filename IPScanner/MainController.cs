@@ -2,6 +2,7 @@ using IPScanner.Model;
 using IPScanner.MnView;
 using IPScanner.IPRangeException;
 using IPScanner.ProgView;
+using IPScanner.netScanView;
 
 using System.Diagnostics;
 using System.Text;
@@ -12,13 +13,15 @@ namespace IPScanner.Controller
     public class MainController
     {
         private readonly MainForm mainForm; // Se contiene la vista principal, y se hace readonly para evitar reescrituras.
-        private readonly ProgressView progressView; // Se contiene la vista de progreso, y se hace readonly para evitar reescrituras.
+        private readonly ProgressView progressView; // Se contiene la vista de progreso.
+        private readonly NetScanView netScanView; // Se contiene la vista para ejecutar comandos "netscan".
         private CancellationTokenSource? cts; // "CancellationTokenSource" se usa para controlar la cancelación de procesos asíncronos de manera segura y coordinada.
 
         public MainController(MainForm mnForm)
         {
             mainForm = mnForm;
             progressView = new ProgressView(); // Crea la vista de progreso.
+            netScanView = new NetScanView(); // Crea la vista de "netscan".
 
             mainForm.GetStartIPField().TextChanged += ValidateIPs; // "TextChanged" es un evento, y le estamos enviando (suscribir) el método "ValidateIPs", para cuando se ejecute el evento, este use el método.
             mainForm.GetEndIPField().TextChanged += ValidateIPs;
@@ -26,10 +29,13 @@ namespace IPScanner.Controller
             mainForm.GetScanBtn().Click += CleanProgressView; // "Click" es un evento, y le estamos enviando el método "CleanProgressView", para cuando se ejecute el evento, este use el método.
             mainForm.GetScanBtn().Click += ScanIPs;
             mainForm.GetCleanBtn().Click += CleanProgressView;
+            mainForm.GetNetScanBtn().Click += OpenNetScan;
 
             progressView.GetStopBtn().Click += (s, e) => { if (cts != null && !cts.IsCancellationRequested) cts.Cancel(); }; // Si "cts" no esta cancelado y existe, se cancela (para terminar con el hilo de escaneo).
             progressView.GetSaveBtn().Click += (s, e) => { progressView.SaveScanResults(); };
             progressView.GetOrderBox().SelectedIndexChanged += (s, e) => { progressView.SortFilterTable(progressView.GetOrderBox().SelectedItem.ToString(), progressView.GetScanResult()); };
+            netScanView.GetNetScanBtn().Click += ExecuteNetScan;
+            netScanView.GetOrderBox().SelectedIndexChanged += (s, e) => { netScanView.SortFilterTable(netScanView.GetOrderBox().SelectedItem.ToString(), netScanView.GetScanResult()); };
             // Se reordena/filtra la tabla cada vez que se cambia de opción.
 
             mainForm.SetEndIPFieldEnabled(false); // Los deshabilito, por ahora.
@@ -53,6 +59,11 @@ namespace IPScanner.Controller
         {
             progressView.CleanAll();
             mainForm.SetCleanBtnEnabled(false);
+        }
+
+        private void OpenNetScan(object? sender, System.EventArgs e)
+        {
+            netScanView.Show();
         }
 
         private async void ScanIPs(object? sender, System.EventArgs e)
@@ -231,5 +242,8 @@ namespace IPScanner.Controller
             return answer;
         }
 
+        private static void ExecuteNetScan(object? sender, System.EventArgs e) {
+            return;
+        }
     }
 }
