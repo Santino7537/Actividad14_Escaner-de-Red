@@ -1,7 +1,6 @@
-using IPScanner.Model;
 using IPScanner.Comparator;
 
-namespace IPScanner.netScanView
+namespace IPScanner.netScnView
 {
     public class NetScanView : Form
     {
@@ -10,6 +9,7 @@ namespace IPScanner.netScanView
         private readonly ComboBox orderBox;
         private readonly BindingSource bindingSource;
         private readonly Button netScanBtn;
+        private readonly CheckBox flagABtn, flagNBtn, flagOBtn;
         private readonly List<dynamic> scanResult = new List<dynamic>(); // lista interna para almacenar todos los datos obtenidos al escanear las IPs.
 
         public NetScanView()
@@ -17,7 +17,35 @@ namespace IPScanner.netScanView
             Text = "NetScan"; // Título de la vista.
             StartPosition = FormStartPosition.CenterScreen; // La ventana aparece centrada en la pantalla.
             FormBorderStyle = FormBorderStyle.FixedSingle; // Impide redimensionar la ventana.
+            ControlBox = false; // Quita todos los botones de control de la ventana.
             Width = 900; Height = 600; // Dimensiones de la ventana.
+
+            flagABtn = new CheckBox
+            {
+                Text = "Agregar -a",
+                AutoSize = true,
+                Size = new Size(80, 30), // Tamaño
+                Location = new Point(10, 0) // Establece la ubicación
+            };
+            Controls.Add(flagABtn);
+
+            flagNBtn = new CheckBox
+            {
+                Text = "Agregar -n",
+                AutoSize = true,
+                Size = new Size(80, 30),
+                Location = new Point(100, 0)
+            };
+            Controls.Add(flagNBtn);
+
+            flagOBtn = new CheckBox
+            {
+                Text = "Agregar -o",
+                AutoSize = true,
+                Size = new Size(80, 30),
+                Location = new Point(190, 0) 
+            };
+            Controls.Add(flagOBtn);
 
             consoleBox = new RichTextBox // Crea un "RichTextBox", que permite al usuario ingresar/ver una gran cantidad de texto.
             {
@@ -125,7 +153,7 @@ namespace IPScanner.netScanView
 
             orderBox = new ComboBox // Crea una "ComboBox", que permite al usuario seleccionar una opción de las tantas que puede almacenar el "ComboBox".
             {
-                Width = 150,
+                Width = 170,
                 DropDownStyle = ComboBoxStyle.DropDownList // Aclara que el "ComboBox" tendrá el estilo de un dropdown.
             };
             orderBox.Items.AddRange(new string[] // Agrega en una lista nuevas opciones para el "ComboBox".
@@ -150,15 +178,14 @@ namespace IPScanner.netScanView
                 Text = "Ejecutar netscan:",
                 AutoSize = true
             };
-            optionPanel.Controls.Add(lblOrdenar, 0, 2);
+            optionPanel.Controls.Add(lblNetScan, 0, 2);
 
             netScanBtn = new Button
             {
                 Text = "netscan",
-                Width = 70,
-                Height = 30
+                Width = 60,
+                Height = 24
             };
-            netScanBtn.Anchor = AnchorStyles.Bottom;
             optionPanel.Controls.Add(netScanBtn, 0, 3);
 
             lowerPanel.BringToFront();
@@ -280,6 +307,9 @@ namespace IPScanner.netScanView
         public Button GetNetScanBtn() { return netScanBtn; }
         public BindingSource GetBindingSource() { return bindingSource; }
         public List<dynamic> GetScanResult() { return scanResult; }
+        public CheckBox GetFlagABtn() { return flagABtn; }
+        public CheckBox GetFlagNBtn() { return flagNBtn; }
+        public CheckBox GetFlagOBtn() { return flagOBtn; }
 
         public void SetOrderBoxEnabled(bool enabled) { orderBox.Enabled = enabled; }
         public void SetNetScanBtnEnabled(bool enabled) { netScanBtn.Enabled = enabled; }

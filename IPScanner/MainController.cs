@@ -2,7 +2,7 @@ using IPScanner.Model;
 using IPScanner.MnView;
 using IPScanner.IPRangeException;
 using IPScanner.ProgView;
-using IPScanner.netScanView;
+using IPScanner.netScnView;
 
 using System.Diagnostics;
 using System.Text;
@@ -63,7 +63,13 @@ namespace IPScanner.Controller
 
         private void OpenNetScan(object? sender, System.EventArgs e)
         {
-            netScanView.Show();
+            if (!netScanView.Visible)
+            {
+                netScanView.Show();
+            }
+            else {
+                netScanView.Hide();
+            }
         }
 
         private async void ScanIPs(object? sender, System.EventArgs e)
@@ -242,8 +248,19 @@ namespace IPScanner.Controller
             return answer;
         }
 
-        private static void ExecuteNetScan(object? sender, System.EventArgs e) {
-            return;
+        private async void ExecuteNetScan(object? sender, System.EventArgs e) {
+            netScanView.AppendToConsole("Escaneando red...");
+
+            string joinedFlags = "-";
+            if (netScanView.GetFlagABtn().Checked) joinedFlags += "a";
+            if (netScanView.GetFlagNBtn().Checked) joinedFlags += "n";
+            if (netScanView.GetFlagOBtn().Checked) joinedFlags += "o";
+
+            string netscanOutput = await RunCommandAsync("netscan", $"{joinedFlags}");
+
+            Console.Write(netscanOutput);
+
+            // progressView.AddResult(ip, hostName, pingResponse, $"{realPingTime.ElapsedMilliseconds}ms", pingTime);
         }
     }
 }
