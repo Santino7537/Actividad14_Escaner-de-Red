@@ -7,7 +7,7 @@ namespace IPScanner.MnView
     {
         private readonly TextBox startIPField, endIPField;
         private readonly NumericUpDown timeOutField;
-        private readonly Button scanBtn, cleanBtn, netScanBtn;
+        private readonly Button scanBtn, cleanBtn, netStatBtn;
 
         public MainForm()
         {
@@ -73,12 +73,12 @@ namespace IPScanner.MnView
 
             layout.Controls.Add(new Label
             {
-                Text = "Abrir ventana de netscan",
+                Text = "Abrir ventana de netstat",
                 AutoSize = true
             });
 
-            netScanBtn = new Button { Text = "NetScan" };
-            layout.Controls.Add(netScanBtn);
+            netStatBtn = new Button { Text = "NetStat" };
+            layout.Controls.Add(netStatBtn);
 
             Controls.Add(layout); // Agrega el "FlowLayoutPanel" a la ventana.
 
@@ -90,13 +90,12 @@ namespace IPScanner.MnView
         public NumericUpDown GetTimeOutField() { return timeOutField; }
         public Button GetScanBtn() { return scanBtn; }
         public Button GetCleanBtn() { return cleanBtn; }
-        public Button GetNetScanBtn() { return netScanBtn; }
+        public Button GetNetStatBtn() { return netStatBtn; }
 
         public void SetStartIPFieldEnabled(bool enabled) { startIPField.Enabled = enabled; }
         public void SetEndIPFieldEnabled(bool enabled) { endIPField.Enabled = enabled; }
         public void SetTimeOutFieldEnabled(bool enabled) { timeOutField.Enabled = enabled; }
         public void SetScanBtnEnabled(bool enabled) { scanBtn.Enabled = enabled; }
         public void SetCleanBtnEnabled(bool enabled) { cleanBtn.Enabled = enabled; }
-        public void SetNetScanBtnEnabled(bool enabled) { netScanBtn.Enabled = enabled; }
     }
 }

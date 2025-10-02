@@ -4,53 +4,57 @@ namespace IPScanner.Comparator
     public class IPComparator
     {
         // Diccionario de prioridades. Menor número es mayor prioridad.
-        static Dictionary<string, int> typePriority = new Dictionary<string, int>()
-        {
-            { "IPV4", 1 },
-            { "IPV6", 2 },
-            { "All IPs and ports", 3 }
-        };
 
         public static int Compare(string ip1, string ip2)
         {
-            string ip1Type = IPType(ip1);
-            string ip2Type = IPType(ip2);
-            int ip1TypePriority = typePriority[ip1Type];
-            int ip2TypePriority = typePriority[ip2Type];
+            // "*:*" siempre al final
+            if (ip1.Contains("*:*") && ip2.Contains("*:*")) return 0;
+            if (ip1.Contains("*:*")) return 1;
+            if (ip2.Contains("*:*")) return -1;
 
-            int cmp = ip1TypePriority.CompareTo(ip2TypePriority); // Si es menor, devuelve algo menor a 0, si es igual, devuelve 0, y si es mayor, devuelve algo mayor a 0.
-            
-            if (cmp != 0) return cmp;
+            string type1 = IPType(ip1);
+            string type2 = IPType(ip2);
 
-            if (ip1Type == "IPV4") { return CompareIPV4s(ip1, ip2); }
-            else if (ip1Type == "IPV6") { return CompareIPV6s(ip1, ip2); } 
-            else { return 0; } // (ip1Type == "All IPs and ports") 
+            if (type1 == "IPV4" && type2 == "IPV4")
+                return CompareIPV4s(ip1, ip2);
+
+            if (type1 == "IPV6" && type2 == "IPV6")
+                return CompareIPV6s(IPV6Fixed(ip1), IPV6Fixed(ip2));
+
+            // IPv4 < IPv6
+            return type1 == "IPV4" ? -1 : 1;
         }
 
         private static string IPType(string ip)
         {
-            if (ip.Count(c => c == '.') == 4 && ip.Contains(':'))
+            if (ip.Count(c => c == '.') == 3 && ip.Contains(':'))
             {
                 return "IPV4";
             }
-            else if (ip.Count(c => c == ':') >= 3 && ip.Contains('['))
+            else //(ip.Count(c => c == ':') >= 3 && ip.Contains('['))
             {
                 return "IPV6";
-            }
-            else // (ip.Contains("*:*"))
-            {
-                return "All IPs and ports";
             }
         }
 
         private static string IPV6Fixed(string ipv6Completa)
         {
+            Console.WriteLine(ipv6Completa);
             int inicio = ipv6Completa.IndexOf('[') + 1; // posición después del '['
             int fin = ipv6Completa.IndexOf(']');        // posición del ']'
 
             string ipv6 = ipv6Completa.Substring(inicio, fin - inicio);
 
-            if (ipv6 == "::") return "[0000:0000:0000:0000:0000:0000:0000:0000]" + ipv6Completa.Substring(fin + 1);
+            // Separar la interfaz si existe
+            string interfaz = "";
+            int idxInterfaz = ipv6.IndexOf('%');
+            if (idxInterfaz != -1)
+            {
+                interfaz = ipv6.Substring(idxInterfaz); // ej: %9
+                ipv6 = ipv6.Substring(0, idxInterfaz);  // dirección sin interfaz
+            }
+
+            if (ipv6 == "::") return $"[0000:0000:0000:0000:0000:0000:0000:0000{interfaz}]{ipv6Completa.Substring(fin + 1)}";
 
             string[] bloques = new string[8];
 
@@ -76,6 +80,9 @@ namespace IPScanner.Comparator
                 string[] partes = ipv6.Split(':');
                 for (int i = 0; i < 8; i++) { bloques[i] = partes[i].PadLeft(4, '0'); }
             }
+
+            // Reagregar la interfaz al final del último bloque
+            bloques[7] += interfaz;
 
             return $"[{string.Join(':', bloques)}]{ipv6Completa.Substring(fin + 1)}";
         }
@@ -103,13 +110,17 @@ namespace IPScanner.Comparator
             string ip1 = ip1Completa.Substring(inicio, fin - inicio);
             string ip2 = ip2Completa.Substring(inicio, fin - inicio);
 
+            Console.WriteLine("1er ip " + ip1);
+            Console.WriteLine("2do ip " + ip2);
+
             var slicedIP1 = ip1.Split(':');
             var slicedIP2 = ip2.Split(':');
 
-            for (int i = 0; i < 8 - 1; i++)
+            for (int i = 0; i < 8; i++)
             {
-                for (int j = 0; j < 4 - 1; i++) {
-                    int cmp = (int)slicedIP1[i][j].CompareTo((int)slicedIP2[i][j]);
+                for (int j = 0; j < 4; j++)
+                {
+                    int cmp = ((int)slicedIP1[i][j]).CompareTo((int)slicedIP2[i][j]);
                     if (cmp != 0) return cmp;
                 }
             }

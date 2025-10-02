@@ -13,8 +13,17 @@ Además, se trabajó sobre los métodos comentados del Lunes 11/08, y se agregó
 Se terminó la aplicación, cumpliendo todos los requisitos del trabajo práctico en cuanto a la parte del programa, solucionando varios errores, añadiendo y eliminando clases, agregando nuevos métodos, y optimizando partes del código en el proceso. Se añadieron 2 pdf al repositorio, uno es el manual para el usuario así sabe utilizar la aplicación, y el otro es la documentación del desarrollo.
 ## Jueves 25/08
 Solamente se agregó un botón.
-## Lunes 29/08
-...
+## Lunes 29/09
+Se agregó una clase para comparar distintos tipos de IPs, que son resultado del comando "netstat". Se agregó una vista la cuál está programada
+para ejecutar y mostrar el resultado de un netstat con las posibles flags -a, -n, y -o. Se modificó el controlador para que pueda ejecutar el
+netstat. Se modificó la vista principal para tener un botón que abra y cierra la ventana de netstat.
+Todavía estas clases no son totalmente funcionales, solo son una base para poder hacer el netstat.
+## Jueves 2/10
+Se siguió trabajando sobre las clases ya creadas, y para poder aplicar cierta lógica en el código, se tuvo
+que crear una interfaz. Se logró que la nueva vista muestre la ejecución del comando netstat, y que permita
+seleccionar distintas flags para este comando, y también permite ordenar y filtrar la tabla de resultados.
+
+Falta actualizar la documentación.
 ## Instrucciones
 Para poder abrir el programa se debe:
 

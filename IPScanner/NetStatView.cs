@@ -1,20 +1,21 @@
 using IPScanner.Comparator;
+using IPScanner.ConsoleI;
 
-namespace IPScanner.netScnView
+namespace IPScanner.netStView
 {
-    public class NetScanView : Form
+    public class NetStatView : Form, ConsoleInterface
     {
         private readonly RichTextBox consoleBox;
         private readonly DataGridView dgvResults;
         private readonly ComboBox orderBox;
         private readonly BindingSource bindingSource;
-        private readonly Button netScanBtn;
+        private readonly Button netStatBtn;
         private readonly CheckBox flagABtn, flagNBtn, flagOBtn;
         private readonly List<dynamic> scanResult = new List<dynamic>(); // lista interna para almacenar todos los datos obtenidos al escanear las IPs.
 
-        public NetScanView()
+        public NetStatView()
         {
-            Text = "NetScan"; // Título de la vista.
+            Text = "NetStat"; // Título de la vista.
             StartPosition = FormStartPosition.CenterScreen; // La ventana aparece centrada en la pantalla.
             FormBorderStyle = FormBorderStyle.FixedSingle; // Impide redimensionar la ventana.
             ControlBox = false; // Quita todos los botones de control de la ventana.
@@ -43,7 +44,7 @@ namespace IPScanner.netScnView
                 Text = "Agregar -o",
                 AutoSize = true,
                 Size = new Size(80, 30),
-                Location = new Point(190, 0) 
+                Location = new Point(190, 0)
             };
             Controls.Add(flagOBtn);
 
@@ -95,21 +96,21 @@ namespace IPScanner.netScnView
                 HeaderText = "Protocolo",
                 DataPropertyName = "Protocolo", // Se asigna un nombre de propiedad, para luego trabajar con las columnas y relacionarlos con sus datos.
                 SortMode = DataGridViewColumnSortMode.Automatic,
-                Width = 100
+                Width = 70
             });
             dgvResults.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Dirección Local",
-                DataPropertyName = "IP Local",
+                DataPropertyName = "IP_Local",
                 SortMode = DataGridViewColumnSortMode.Automatic,
-                Width = 200
+                Width = 190
             });
             dgvResults.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Dirección Remota",
-                DataPropertyName = "IP Remota",
+                DataPropertyName = "IP_Remota",
                 SortMode = DataGridViewColumnSortMode.Automatic,
-                Width = 150
+                Width = 190
             });
             dgvResults.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -173,20 +174,20 @@ namespace IPScanner.netScnView
             orderBox.SelectedIndex = 0; // Por defecto, se selecciona la primera opción del "ComboBox".
             optionPanel.Controls.Add(orderBox, 0, 1);
 
-            Label lblNetScan = new Label
+            Label lblNetStat = new Label
             {
-                Text = "Ejecutar netscan:",
+                Text = "Ejecutar netstat:",
                 AutoSize = true
             };
-            optionPanel.Controls.Add(lblNetScan, 0, 2);
+            optionPanel.Controls.Add(lblNetStat, 0, 2);
 
-            netScanBtn = new Button
+            netStatBtn = new Button
             {
-                Text = "netscan",
+                Text = "netstat",
                 Width = 60,
                 Height = 24
             };
-            optionPanel.Controls.Add(netScanBtn, 0, 3);
+            optionPanel.Controls.Add(netStatBtn, 0, 3);
 
             lowerPanel.BringToFront();
             tablePanel.BringToFront();
@@ -236,46 +237,47 @@ namespace IPScanner.netScnView
 
                 if (sortBy == "Dirección Local Ascendente")
                 {
-                    sortedData = data.OrderBy(x => (string)x.IP, Comparer<string>.Create(IPComparator.Compare));
+                    sortedData = data.OrderBy(x => (string)x.IP_Local, Comparer<string>.Create(IPComparator.Compare));
                     // Ordena los objetos anónimos de "data" ascendentemente según el atributo "Dirección Local Ascendente", utilizando un Comparer (comparador) creado a partir del método "Compare".
                 }
                 else if (sortBy == "Dirección Local Descendente")
                 {
-                    sortedData = data.OrderByDescending(x => (string)x.IP, Comparer<string>.Create(IPComparator.Compare));
+                    sortedData = data.OrderByDescending(x => (string)x.IP_Local, Comparer<string>.Create(IPComparator.Compare));
                     // Ordena los objetos anónimos de "data" descendentemente según el atributo "Dirección Local Descendente", utilizando un Comparer (comparador) creado a partir del método "Compare".
                 }
                 else if (sortBy == "Dirección Remota Ascendente")
                 {
-                    sortedData = data.OrderBy(x => (string)x.IP, Comparer<string>.Create(IPComparator.Compare));
+                    sortedData = data.OrderBy(x => (string)x.IP_Remota, Comparer<string>.Create(IPComparator.Compare));
                 }
                 else if (sortBy == "Dirección Remota Descendente")
                 {
-                    sortedData = data.OrderByDescending(x => (string)x.IP, Comparer<string>.Create(IPComparator.Compare));
+                    Console.WriteLine(data[0].IP_Remota);
+                    sortedData = data.OrderByDescending(x => (string)x.IP_Remota, Comparer<string>.Create(IPComparator.Compare));
                 }
                 else if (sortBy == "PID Ascendente")
                 {
-                    sortedData = data.OrderBy(x => (string)x.IP, Comparer<string>.Create(IPComparator.Compare));
+                    sortedData = data.OrderBy(x => int.TryParse(x.PID, out int n) ? n : int.MaxValue).ToList();
                 }
                 else if (sortBy == "PID Descendente")
                 {
-                    sortedData = data.OrderByDescending(x => (string)x.IP, Comparer<string>.Create(IPComparator.Compare));
+                    sortedData = data.OrderByDescending(x => int.TryParse(x.PID, out int n) ? n : int.MaxValue).ToList();
                 }
                 else if (sortBy == "LISTENING")
                 {
-                    sortedData = data.Where(x => x.Answer == "LISTENING");
-                    // Filtra los objetos anónimos de "data" según el atributo "Answer", devolviendo solo aquellos cuyo atributo "Answer" sea exactamente igual a "LISTENING".
+                    sortedData = data.Where(x => x.Estado == "LISTENING");
+                    // Filtra los objetos anónimos de "data" según el atributo "estado", devolviendo solo aquellos cuyo atributo "estado" sea exactamente igual a "LISTENING".
                 }
                 else if (sortBy == "ESTABLISHED")
                 {
-                    sortedData = data.Where(x => x.Answer == "ESTABLISHED");
+                    sortedData = data.Where(x => x.Estado == "ESTABLISHED");
                 }
                 else if (sortBy == "CLOSE_WAIT")
                 {
-                    sortedData = data.Where(x => x.Answer == "CLOSE_WAIT");
+                    sortedData = data.Where(x => x.Estado == "CLOSE_WAIT");
                 }
                 else if (sortBy == "TIME_WAIT")
                 {
-                    sortedData = data.Where(x => x.Answer == "TIME_WAIT");
+                    sortedData = data.Where(x => x.Estado == "TIME_WAIT");
                 }
 
                 foreach (var fila in sortedData)
@@ -304,7 +306,7 @@ namespace IPScanner.netScnView
         public RichTextBox GetConsoleBox() { return consoleBox; }
         public DataGridView GetDgvResults() { return dgvResults; }
         public ComboBox GetOrderBox() { return orderBox; }
-        public Button GetNetScanBtn() { return netScanBtn; }
+        public Button GetNetStatBtn() { return netStatBtn; }
         public BindingSource GetBindingSource() { return bindingSource; }
         public List<dynamic> GetScanResult() { return scanResult; }
         public CheckBox GetFlagABtn() { return flagABtn; }
@@ -312,6 +314,6 @@ namespace IPScanner.netScnView
         public CheckBox GetFlagOBtn() { return flagOBtn; }
 
         public void SetOrderBoxEnabled(bool enabled) { orderBox.Enabled = enabled; }
-        public void SetNetScanBtnEnabled(bool enabled) { netScanBtn.Enabled = enabled; }
+        public void SetNetStatBtnEnabled(bool enabled) { netStatBtn.Enabled = enabled; }
     }
 }

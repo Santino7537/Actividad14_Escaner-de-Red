@@ -2,7 +2,8 @@ using IPScanner.Model;
 using IPScanner.MnView;
 using IPScanner.IPRangeException;
 using IPScanner.ProgView;
-using IPScanner.netScnView;
+using IPScanner.netStView;
+using IPScanner.ConsoleI;
 
 using System.Diagnostics;
 using System.Text;
@@ -14,14 +15,14 @@ namespace IPScanner.Controller
     {
         private readonly MainForm mainForm; // Se contiene la vista principal, y se hace readonly para evitar reescrituras.
         private readonly ProgressView progressView; // Se contiene la vista de progreso.
-        private readonly NetScanView netScanView; // Se contiene la vista para ejecutar comandos "netscan".
+        private readonly NetStatView netStatView; // Se contiene la vista para ejecutar comandos "netscan".
         private CancellationTokenSource? cts; // "CancellationTokenSource" se usa para controlar la cancelación de procesos asíncronos de manera segura y coordinada.
-
+        private bool ProtoAppear = false;
         public MainController(MainForm mnForm)
         {
             mainForm = mnForm;
             progressView = new ProgressView(); // Crea la vista de progreso.
-            netScanView = new NetScanView(); // Crea la vista de "netscan".
+            netStatView = new NetStatView(); // Crea la vista de "netscan".
 
             mainForm.GetStartIPField().TextChanged += ValidateIPs; // "TextChanged" es un evento, y le estamos enviando (suscribir) el método "ValidateIPs", para cuando se ejecute el evento, este use el método.
             mainForm.GetEndIPField().TextChanged += ValidateIPs;
@@ -29,13 +30,14 @@ namespace IPScanner.Controller
             mainForm.GetScanBtn().Click += CleanProgressView; // "Click" es un evento, y le estamos enviando el método "CleanProgressView", para cuando se ejecute el evento, este use el método.
             mainForm.GetScanBtn().Click += ScanIPs;
             mainForm.GetCleanBtn().Click += CleanProgressView;
-            mainForm.GetNetScanBtn().Click += OpenNetScan;
+            mainForm.GetNetStatBtn().Click += OpenNetStat;
 
             progressView.GetStopBtn().Click += (s, e) => { if (cts != null && !cts.IsCancellationRequested) cts.Cancel(); }; // Si "cts" no esta cancelado y existe, se cancela (para terminar con el hilo de escaneo).
             progressView.GetSaveBtn().Click += (s, e) => { progressView.SaveScanResults(); };
             progressView.GetOrderBox().SelectedIndexChanged += (s, e) => { progressView.SortFilterTable(progressView.GetOrderBox().SelectedItem.ToString(), progressView.GetScanResult()); };
-            netScanView.GetNetScanBtn().Click += ExecuteNetScan;
-            netScanView.GetOrderBox().SelectedIndexChanged += (s, e) => { netScanView.SortFilterTable(netScanView.GetOrderBox().SelectedItem.ToString(), netScanView.GetScanResult()); };
+            netStatView.GetNetStatBtn().Click += ExecuteNetStat;
+            netStatView.GetNetStatBtn().Click += CleanNetStatView;
+            netStatView.GetOrderBox().SelectedIndexChanged += (s, e) => { netStatView.SortFilterTable(netStatView.GetOrderBox().SelectedItem.ToString(), netStatView.GetScanResult()); };
             // Se reordena/filtra la tabla cada vez que se cambia de opción.
 
             mainForm.SetEndIPFieldEnabled(false); // Los deshabilito, por ahora.
@@ -61,14 +63,20 @@ namespace IPScanner.Controller
             mainForm.SetCleanBtnEnabled(false);
         }
 
-        private void OpenNetScan(object? sender, System.EventArgs e)
+        private void CleanNetStatView(object? sender, System.EventArgs e)
         {
-            if (!netScanView.Visible)
+            netStatView.CleanAll();
+        }
+
+        private void OpenNetStat(object? sender, System.EventArgs e)
+        {
+            if (!netStatView.Visible)
             {
-                netScanView.Show();
+                netStatView.Show();
             }
-            else {
-                netScanView.Hide();
+            else
+            {
+                netStatView.Hide();
             }
         }
 
@@ -132,12 +140,12 @@ namespace IPScanner.Controller
                 progressView.AppendToConsole($"Escaneando {ip}...");
 
                 var realPingTime = Stopwatch.StartNew(); // Con este contador se va a tomar cuanto tarda verdaderamente en ejecutarse el comando "ping".
-                string pingOutput = await RunCommandAsync("ping", $"-n 1 {ip}");
+                string pingOutput = await RunCommandAsync("ping", $"-n 1 {ip}", progressView);
                 realPingTime.Stop();
 
                 string pingResponse = PingResponse(pingOutput);
 
-                string nsOutput = await RunCommandAsync("nslookup", ip);
+                string nsOutput = await RunCommandAsync("nslookup", ip, progressView);
                 string hostName = ExtractHostName(nsOutput);
 
                 string pingTime = ExtractPingTime(pingOutput); // Se obtiene el tiempo que el comando "ping" midió.
@@ -148,7 +156,7 @@ namespace IPScanner.Controller
             startScan.Stop();
         }
 
-        private async Task<string> RunCommandAsync(string command, string args)
+        private async Task<string> RunCommandAsync(string command, string args, ConsoleInterface view)
         {
             var process = new Process // Permite iniciar y controlar procesos externos.
             {
@@ -171,7 +179,12 @@ namespace IPScanner.Controller
                 if (text.Data != null)
                 {
                     commandOutput.AppendLine(text.Data);
-                    progressView.AppendToConsole(text.Data);
+                    view.AppendToConsole(text.Data);
+                    if (view.GetType() == typeof(NetStatView))
+                    {
+                        if (ProtoAppear) AppendNetStatToConsole(text.Data, view);
+                        if (text.Data.Contains("Proto")) ProtoAppear = true;
+                    }
                 }
             };
             process.ErrorDataReceived += (trigger, text) => // Evento que se dispara cada vez que el proceso genera un error.
@@ -179,7 +192,7 @@ namespace IPScanner.Controller
                 if (text.Data != null)
                 {
                     commandOutput.AppendLine(text.Data);
-                    progressView.AppendToConsole(text.Data);
+                    view.AppendToConsole(text.Data);
                 }
             };
 
@@ -248,19 +261,68 @@ namespace IPScanner.Controller
             return answer;
         }
 
-        private async void ExecuteNetScan(object? sender, System.EventArgs e) {
-            netScanView.AppendToConsole("Escaneando red...");
+        private async void ExecuteNetStat(object? sender, System.EventArgs e)
+        {
+            netStatView.SetNetStatBtnEnabled(false);
+            netStatView.AppendToConsole("Escaneando red...");
 
             string joinedFlags = "-";
-            if (netScanView.GetFlagABtn().Checked) joinedFlags += "a";
-            if (netScanView.GetFlagNBtn().Checked) joinedFlags += "n";
-            if (netScanView.GetFlagOBtn().Checked) joinedFlags += "o";
+            if (netStatView.GetFlagABtn().Checked) joinedFlags += "a";
+            if (netStatView.GetFlagNBtn().Checked)
+            {
+                joinedFlags += "n";
+                if (netStatView.GetOrderBox().Items.IndexOf("Dirección Remota Ascendente") == -1)
+                {
+                    netStatView.GetOrderBox().Items.Insert(2, "Dirección Remota Ascendente");
+                    netStatView.GetOrderBox().Items.Insert(3, "Dirección Remota Descendente");
+                }
+            }
+            else
+            {
+                if (netStatView.GetOrderBox().Items.IndexOf("Dirección Remota Ascendente") != -1)
+                {
+                    int idxDirRemotaAsc = netStatView.GetOrderBox().Items.IndexOf("Dirección Remota Ascendente");
+                    netStatView.GetOrderBox().Items.RemoveAt(idxDirRemotaAsc);
+                    int idxDirRemotaDesc = netStatView.GetOrderBox().Items.IndexOf("Dirección Remota Descendente");
+                    netStatView.GetOrderBox().Items.RemoveAt(idxDirRemotaDesc);
+                }
+            }
+            if (netStatView.GetFlagOBtn().Checked) joinedFlags += "o";
 
-            string netscanOutput = await RunCommandAsync("netscan", $"{joinedFlags}");
+            await RunCommandAsync("netstat", $"{joinedFlags}", netStatView);
 
-            Console.Write(netscanOutput);
+            netStatView.AppendToConsole("Se termino de escanear la red.");
+            netStatView.SetNetStatBtnEnabled(true);
+            netStatView.SetOrderBoxEnabled(true);
+            ProtoAppear = false;
+        }
 
-            // progressView.AddResult(ip, hostName, pingResponse, $"{realPingTime.ElapsedMilliseconds}ms", pingTime);
+        private static void AppendNetStatToConsole(string text, ConsoleInterface view)
+        {
+            string[] slicedText = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            string protocolo = slicedText[0];
+            string ip_local = slicedText[1];
+            string ip_remota = slicedText[2];
+
+            string estado = "N/A";
+            string pid = "N/A";
+            if (slicedText.Length >= 4)
+            {
+                try
+                {
+                    int.Parse(slicedText[3]);
+                    pid = slicedText[3];
+                }
+                catch (FormatException)
+                {
+                    estado = slicedText[3];
+                }
+
+                if (slicedText.Length == 5) pid = slicedText[4];
+            }
+
+            view.AddResult(protocolo, ip_local, ip_remota, estado, pid);
         }
     }
 }

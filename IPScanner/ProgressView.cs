@@ -1,9 +1,10 @@
 using IPScanner.Model;
+using IPScanner.ConsoleI;
 
 namespace IPScanner.ProgView
 {
     // La vista de progreso del escaneo de IPs.
-    public partial class ProgressView : Form
+    public partial class ProgressView : Form, ConsoleInterface
     {
         private readonly Label percentageLbl, devicesRespondedLbl;
         private readonly ProgressBar progressBar;
