@@ -22,8 +22,7 @@ Todavía estas clases no son totalmente funcionales, solo son una base para pode
 Se siguió trabajando sobre las clases ya creadas, y para poder aplicar cierta lógica en el código, se tuvo
 que crear una interfaz. Se logró que la nueva vista muestre la ejecución del comando netstat, y que permita
 seleccionar distintas flags para este comando, y también permite ordenar y filtrar la tabla de resultados.
-
-Falta actualizar la documentación.
+La documentación y el manual de usuario se actualizaron.
 ## Instrucciones
 Para poder abrir el programa se debe:
 
